@@ -21,7 +21,7 @@ class EmployeeCard extends StatelessWidget {
       margin: const EdgeInsets.all(8.0),
       child: ListTile(
         title: Text(employee.name),
-        subtitle: Text('Age: ${employee.age}, Phone: ${employee.phoneNumber}'),
+        subtitle: Text('Age: ${employee.age}, Phone: ${employee.phone}'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

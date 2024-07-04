@@ -6,6 +6,7 @@ import '../../models/employeeModel.dart';
 import '../../common_widgets/employeeCard.dart';
 import '../../common_widgets/menu.dart';
 import 'package:http/http.dart' as http;
+import './editEmployee.dart';
 
 class AllEmployeesPage extends StatefulWidget {
   const AllEmployeesPage({Key? key}) : super(key: key);
@@ -61,6 +62,12 @@ class _AllEmployeesPageState extends State<AllEmployeesPage> {
   void editEmployee(Employee employee) {
     // Implement edit functionality
     // Navigate to edit screen or show dialog
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditEmployeePage(employee: employee),
+      ),
+    );
   }
 
   void deleteEmployee(Employee employee) async {

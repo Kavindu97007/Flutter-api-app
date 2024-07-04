@@ -19,6 +19,44 @@ class _AddEmployeeState extends State<AddEmployee> {
   final TextEditingController ageController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
 
+  void postdata() async {
+    final String name = nameController.text;
+    final int age = int.tryParse(ageController.text) ?? 0;
+    final String phone = phoneController.text;
+
+    if (name.isNotEmpty && age > 0 && phone.isNotEmpty) {
+      final newEmployee = Employee(
+        name: name,
+        age: age,
+        phone: phone,
+      );
+      print(newEmployee.phone);
+
+      final response = await http.post(
+        Uri.parse('http://localhost:5000/api/employee'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(newEmployee),
+      );
+      print(response.body);
+      if (response.statusCode == 201) {
+        // Successfully added employee
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AllEmployeesPage(),
+          ),
+        );
+      } else {
+        // Handle error
+        print('Failed to add employee');
+      }
+    } else {
+      // Handle validation error
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,42 +102,7 @@ class _AddEmployeeState extends State<AddEmployee> {
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Add',
-        onPressed: () async {
-          final String name = nameController.text;
-          final int age = int.tryParse(ageController.text) ?? 0;
-          final String phone = phoneController.text;
-
-          if (name.isNotEmpty && age > 0 && phone.isNotEmpty) {
-            final newEmployee = Employee(
-              name: name,
-              age: age,
-              phoneNumber: phone,
-            );
-
-            final response = await http.post(
-              Uri.parse('http://localhost:5000/api/employee'),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8',
-              },
-              body: jsonEncode(newEmployee.toJson()),
-            );
-
-            if (response.statusCode == 201) {
-              // Successfully added employee
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AllEmployeesPage(),
-                ),
-              );
-            } else {
-              // Handle error
-              print('Failed to add employee');
-            }
-          } else {
-            // Handle validation error
-          }
-        },
+        onPressed: postdata,
         backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
